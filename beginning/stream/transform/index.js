@@ -15,6 +15,7 @@ if (dataText !== 'aaaabbbbccccddddeeeeffff\n') {
 }
 
 
+// テスト用 ReadableStream 生成のためにファイルを読み込む。
 // Ref) http://nodejs.jp/nodejs.org_ja/api/fs.html#fs_fs_createreadstream_path_options
 var readableStream = fs.createReadStream(DATA_FILE_PATH, {
   // 4 バイトずつ読み込む、旧 bufferSize オプション
@@ -25,10 +26,13 @@ var readableStream = fs.createReadStream(DATA_FILE_PATH, {
   end: 23
 });
 
+
 // Ref) http://nodejs.jp/nodejs.org_ja/api/stream.html#stream_class_stream_transform_1
 var chunkIndex = 0;
 var transformer = new stream.Transform();
+
 transformer._transform = function(chunk, encoding, callback){
+
   // Buffer 型なのでキャストする
   var chunkAsString = chunk.toString();
 
@@ -41,10 +45,17 @@ transformer._transform = function(chunk, encoding, callback){
   callback();
 };
 
+// 処理終了時に呼ばれる、任意設定
+transformer._flush = function(callback){
+  this.push('\nEND');
+  callback();
+};
+
 
 // 出力は
 //
 //   AAAA0BBBB1CCCC2DDDD3EEEE4FFFF5
+//   END
 //
 // になる
 readableStream
