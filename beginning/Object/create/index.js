@@ -20,22 +20,29 @@ assert(foo.protoProp === 10);
 assert(foo.notProtoProp === 'a');
 assert(foo.__proto__.protoProp === 10);
 
+
+//
 // Foo.prototype を prototype にもつ bar オブジェクトを生成する
+//
+// new Foo との違いは:
+// - コンストラクタを実行しないで良い
+//
 var bar = Object.create(Foo.prototype);
 assert(bar.__proto__.protoProp === 10);
 
-
-// オマケ: Foo と同じ初期化をしたければこうする
+// その後に、Foo コンストラクタを実行する方法
 Foo.call(bar, 'a');
 assert(bar.notProtoProp === 'a');
 
 
 // オマケ: prototype や __proto__ のこと
-assert(foo.prototype !== Foo.prototype);
+assert(typeof Foo.prototype === 'object');
+assert(foo.prototype === undefined);  // prototype は関数オブジェクトにしか無い
+assert(foo.__proto__ === Foo.prototype);
 assert(foo instanceof Foo);
-assert(foo.__proto__ === Foo.prototype);  // @TODO __proto__ って何？
 
-assert(bar.prototype !== Foo.prototype);
-assert(bar instanceof Foo);
+
+// var bar = new Foo(); と同じであることの確認
+assert(bar.prototype === undefined);
 assert(bar.__proto__ === Foo.prototype);
-assert(bar.prototype === foo.prototype);  // @TODO 何故？
+assert(bar instanceof Foo);
