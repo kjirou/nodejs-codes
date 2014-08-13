@@ -37,8 +37,8 @@ assert(bar.notProtoProp === 'a');
 
 // オマケ: prototype や __proto__ のこと
 assert(typeof Foo.prototype === 'object');
-assert(foo.prototype === undefined);  // prototype は関数オブジェクトにしか無い
-assert(foo.__proto__ === Foo.prototype);
+assert(foo.prototype === undefined);  // "prototype" プロパティ自体は関数オブジェクトにしか無い
+assert(foo.__proto__ === Foo.prototype);  // プロトタイプチェーンの実体は __proto__ である
 assert(foo instanceof Foo);
 
 
