@@ -3,7 +3,7 @@
 //
 // Object.create()
 //
-//   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+//   https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Object/create
 //
 
 var assert = require('assert');
@@ -19,10 +19,11 @@ var foo = new Foo('a');
 assert(foo.protoProp === 10);
 assert(foo.notProtoProp === 'a');
 assert(foo.__proto__.protoProp === 10);
+assert(foo instanceof Foo);
 
 
 //
-// Foo.prototype を prototype にもつ bar オブジェクトを生成する
+// Foo.prototype をプロトタイプとする bar オブジェクトを生成する
 //
 // new Foo との違いは:
 // - コンストラクタを実行しないで良い
@@ -39,10 +40,19 @@ assert(bar.notProtoProp === 'a');
 assert(typeof Foo.prototype === 'object');
 assert(foo.prototype === undefined);  // "prototype" プロパティ自体は関数オブジェクトにしか無い
 assert(foo.__proto__ === Foo.prototype);  // プロトタイプチェーンの実体は __proto__ である
-assert(foo instanceof Foo);
 
 
 // var bar = new Foo(); と同じであることの確認
 assert(bar.prototype === undefined);
 assert(bar.__proto__ === Foo.prototype);
 assert(bar instanceof Foo);
+
+
+// Object.create 第二引数の使い方
+var baz = Object.create(Foo.prototype, {
+  x: {
+    value: 123
+  }
+});
+assert(baz.x === 123);
+assert(baz.__proto__.x === undefined);
