@@ -1,0 +1,18 @@
+{
+  "name": "nodejs_codes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kjirou/nodejs_codes"
+  },
+  "private": true,
+  "description": "",
+  "version": "0.0.1",
+  "author": "kjirou",
+  "dependencies": {
+    "jade": "*"
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+  }
+}
