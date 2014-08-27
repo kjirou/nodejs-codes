@@ -9,7 +9,8 @@
   "version": "0.0.1",
   "author": "kjirou",
   "dependencies": {
-    "jade": "*"
+    "jade": "*",
+    "ip": "*"
   },
   "devDependencies": {
   },
