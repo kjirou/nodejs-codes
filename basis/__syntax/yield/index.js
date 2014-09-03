@@ -1,5 +1,12 @@
 #!/usr/bin/env node --harmony
 
+//
+// Generator (yield) の使用は、0.11 系のいくつかからで、
+// 実行時に --harmony オプションが必要になる。
+//
+// とりあえず、0.11.11 では使えて 0.10.22 では使えなかった。
+//
+
 var assert = require('assert');
 
 
