@@ -10,7 +10,8 @@
   "author": "kjirou",
   "dependencies": {
     "jade": "*",
-    "ip": "*"
+    "ip": "*",
+    "app-root-path": "*"
   },
   "devDependencies": {
   },
