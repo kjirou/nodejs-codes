@@ -3,6 +3,8 @@
 //
 // package.json の位置を取得したい
 //
+// 現在の結論: 疎結合にスマートに取得する方法は無い
+//
 
 var assert = require('assert');
 
@@ -22,6 +24,10 @@ var assert = require('assert');
 
 //
 // 外部モジュールの app-root-path を使う方法
+//
+// 一見良さそうだけど、中身を見たら方法がハック的だった。
+// https://github.com/inxilpro/node-app-root-path/blob/master/lib/resolve.js
+// を見てみると、"/node_modules" の場所から判定しているよう。
 //
 
 var fs = require('fs');
