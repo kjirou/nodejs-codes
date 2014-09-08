@@ -5,7 +5,7 @@
 //
 
 assert = require('assert');
-foo = require('./foo');  // 別ファイルで exports = しているもの
+foo = require('./foo');  // 別ファイルで exports しているモジュール
 
 
 assert.deepEqual(foo, {
