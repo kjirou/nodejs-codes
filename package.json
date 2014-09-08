@@ -9,9 +9,10 @@
   "version": "0.0.1",
   "author": "kjirou",
   "dependencies": {
+    "app-root-path": "*",
     "jade": "*",
     "ip": "*",
-    "app-root-path": "*"
+    "mocha": "~1.21"
   },
   "devDependencies": {
   },
