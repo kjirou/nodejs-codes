@@ -12,7 +12,8 @@
     "app-root-path": "*",
     "jade": "*",
     "ip": "*",
-    "mocha": "~1.21"
+    "mocha": "~1.21",
+    "sugar": "~1.3"
   },
   "devDependencies": {
   },
