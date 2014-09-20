@@ -15,5 +15,6 @@ assert(obj.foo() === 2);
 objMock.restore();
 assert(obj.foo() === 1);
 
-// 二重に restore できる
+// 二重に restore してもエラーにはならない
 objMock.restore();
+assert(obj.foo() === 1);
