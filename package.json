@@ -9,16 +9,16 @@
   "version": "0.0.1",
   "author": "kjirou",
   "dependencies": {
-    "app-root-path": "*",
-    "bluebird": "~2.3.2",
-    "jade": "*",
-    "ip": "*",
-    "mocha": "~1.21",
-    "moment": "~2.8.3",
-    "should": "~4.0.4",
-    "sinon": "~1.10.3",
-    "sugar": "~1.3",
-    "underscore": "~1.7"
+    "app-root-path": "0.1.0",
+    "bluebird": "2.3.2",
+    "jade": "1.5.0",
+    "ip": "0.3.1",
+    "mocha": "1.21.4",
+    "moment": "2.8.3",
+    "should": "4.0.4",
+    "sinon": "1.10.3",
+    "sugar": "1.3.9",
+    "underscore": "1.7.0"
   },
   "devDependencies": {
   },
