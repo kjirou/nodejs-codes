@@ -7,6 +7,10 @@ var should = require('should');
 // eql は == や deepEqual 的な判定
 (true).should.eql(1);
 [1, 2, 3].should.eql([1, 2, 3]);
+('foo').should.eql('foo');
+assert.throws(function(){
+  ('foo').should.eql('bar');
+}, /AssertionError/);
 
 // 完全一致は equal や be.exactly
 (2).should.equal(2);
