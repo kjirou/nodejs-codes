@@ -63,3 +63,21 @@ assert.deepEqual(_.merge(dist, source), {
   y: 2,
   z: 3
 });
+
+
+//
+// 循環参照がある場合は？
+//
+// とりあえずエラーにはならない。
+// ネイティブの Circular オブジェクトとして上書きされる。
+//
+// なお、Circular オブジェクトはこういう風に書くと簡単に作れる
+//
+// var a = {};
+// a.a = a;
+//
+var source = {
+  x: 1
+};
+source.foo = source;
+_.merge({}, source);
