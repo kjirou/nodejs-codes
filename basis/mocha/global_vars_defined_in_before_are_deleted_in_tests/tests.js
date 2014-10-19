@@ -11,11 +11,9 @@ var assert = require('assert');
 // また before 内で require したファイル内で global.bar = 2 を定義している
 require('./settings');
 
-describe('Title', function(){
-  it('Does foo exist?', function(){
-    assert.strictEqual(foo, 1);
-    assert.strictEqual(global.foo, 1);
-    assert.strictEqual(bar, 2);
-    assert.strictEqual(global.bar, 2);
-  });
+it('グローバル変数が定義されている', function(){
+  assert.strictEqual(global.foo, 1);
+  assert.strictEqual(foo, 1);
+  assert.strictEqual(global.bar, 2);
+  assert.strictEqual(bar, 2);
 });
