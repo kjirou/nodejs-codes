@@ -13,3 +13,15 @@ var fn = jade.compile(source);
 var html = fn({ list:['a', 'b', 'c'] });
 
 assert.strictEqual(html, '<div>a,0</div><div>b,1</div><div>c,2</div>');
+
+
+// #{} と !{}
+var source = [
+'|#{str}',
+'|!{str}'
+].join('\n');
+
+var fn = jade.compile(source);
+var text = fn({ str:'a&b' });
+
+assert.strictEqual(text, 'a&amp;b\na&b');
