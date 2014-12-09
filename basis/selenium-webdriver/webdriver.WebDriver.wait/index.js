@@ -2,7 +2,7 @@
 
 //
 // マニュアル)
-// http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_promise_ControlFlow.html#wait
+// http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html#wait
 //
 
 var assert = require('assert');
