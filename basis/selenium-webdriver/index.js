@@ -4,6 +4,7 @@
 // WebDriverJS
 //
 // マニュアル) https://code.google.com/p/selenium/wiki/WebDriverJs
+// API Docs) http://selenium.googlecode.com/git/docs/api/javascript/index.html
 //
 
 var assert = require('assert');
