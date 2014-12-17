@@ -1,11 +1,5 @@
 {
   "name": "nodejs_codes",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kjirou/nodejs_codes"
-  },
-  "private": true,
-  "description": "",
   "version": "0.0.1",
   "author": "kjirou",
   "dependencies": {
@@ -36,6 +30,13 @@
     "uuid": "1.4.1",
     "validator": "3.19.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "fixpack": "^1.2.0"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kjirou/nodejs_codes"
+  },
   "scripts": {}
 }
