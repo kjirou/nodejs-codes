@@ -29,7 +29,8 @@
     "tracer": "0.7.3",
     "underscore": "1.7.0",
     "uuid": "1.4.1",
-    "validator": "3.19.0"
+    "validator": "3.19.0",
+    "rewire": "2.1.4"
   },
   "devDependencies": {
     "fixpack": "^1.2.0"
