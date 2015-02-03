@@ -15,6 +15,16 @@ var plusTwo = foo.__get__('plusTwo');
 assert.strictEqual(plusOne(1), 2);
 assert.strictEqual(plusTwo(1), 3);
 
+// if ブロック内で定義されている内部関数が取得できる
+var plusOneInBlock = foo.__get__('plusOneInBlock');
+var plusTwoInBlock = foo.__get__('plusTwoInBlock');
+assert.strictEqual(plusOneInBlock(1), 2);
+assert.strictEqual(plusTwoInBlock(1), 3);
+
+// スコープ内で定義されている内部関数が取得できる
+var plusTwoInFunction = foo.__get__('plusTwoInFunction');
+assert.strictEqual(plusTwoInFunction(1), 3);
+
 // __dirname が正しい場所を差している
 assert.strictEqual(foo.getDirname(), __dirname + '/foomodule');
 
