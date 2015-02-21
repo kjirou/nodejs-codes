@@ -8,6 +8,7 @@
     "bluebird": "2.3.2",
     "colors": "1.0.3",
     "concat-stream": "1.4.6",
+    "espower-loader": "0.10.0",
     "esprima": "1.2.2",
     "formidable": "1.0.15",
     "http-errors": "1.2.8",
@@ -21,6 +22,7 @@
     "mongoose": "3.8.16",
     "mongoose-validator": "1.0.2",
     "over": "0.0.5",
+    "power-assert": "0.10.2",
     "random-word-generator": "0.9.9",
     "rewire": "2.1.4",
     "selenium-webdriver": "2.44.0",
@@ -35,12 +37,17 @@
     "validator": "3.19.0"
   },
   "devDependencies": {
-    "fixpack": "^1.2.0"
+    "fixpack": "1.2.0"
+  },
+  "directories": {
+    "test": "test/"
   },
   "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/kjirou/nodejs_codes"
   },
-  "scripts": {}
+  "scripts": {
+    "power-assert-test": "mocha --require test/power-assert/espower-loader.js test/power-assert/*.js"
+  }
 }
