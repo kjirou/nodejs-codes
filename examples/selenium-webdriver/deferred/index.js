@@ -32,5 +32,7 @@ d.then(function(){
     });
   }, 5000).then(function(){
     console.log('D');
+  }).then(function(){
+    driver.quit();
   });
 });

@@ -28,4 +28,6 @@ driver.wait(function(){
   });
 }, 5000).then(function(){
   console.log('B');
+}).then(function(){
+  driver.quit();
 });

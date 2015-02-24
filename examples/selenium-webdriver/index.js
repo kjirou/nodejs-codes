@@ -65,5 +65,7 @@ d.promise.then(function(){
     return d2.promise;
   }).then(function(title){
     console.log('G');
+  }).then(function(title){
+    driver.quit();
   });
 });

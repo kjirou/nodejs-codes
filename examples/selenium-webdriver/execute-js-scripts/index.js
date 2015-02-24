@@ -19,4 +19,6 @@ driver.get('http://example.com').then(function(){
   return driver.executeScript('return ["a", "b", "c"];');
 }).then(function(result){
   assert.strictEqual(result.join('|'), 'a|b|c');
+}).then(function(){
+  driver.quit();
 });

@@ -22,5 +22,6 @@ driver.get('http://example.com').then(function(){
   console.log(arguments); // -> { '0': null }
   return driver.getTitle().then(function(title){
     assert.strictEqual(title, 'Example Domain');
+    driver.quit();
   });
 });
