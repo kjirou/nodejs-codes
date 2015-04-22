@@ -16,7 +16,7 @@ im.convert([
 });
 
 // 指定範囲を別画像として生成する
-// 範囲指定の書式は {width}x{height}+{top}+{left}
+// 範囲指定の書式は {width}x{height}+{left}+{top}
 im.convert([
   '../support/denzi/Denzi140330-12.png', '-crop', '16x16+0+352', 'tmp/fighter.png'
 ], function(err, stdout, stderr){
