@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var Rx = require('rx');
+var util = require('util');
 
 
 //
@@ -9,15 +10,22 @@ var Rx = require('rx');
 //
 
 
-var source = Rx.Observable.timer(200, 100)
+var args = process.argv.slice(2);
+var offset = ~~args[0];
+var interval = ~~args[1];
+var takes = ~~args[2] || 1;
+
+
+var source = Rx.Observable.timer(offset, interval)
   .timeInterval()
-  .pluck('interval')
-  .take(3)
+  //.pluck('interval')
+  .take(takes)
 ;
 
 var subscription = source.subscribe(
   function (x) {
-    console.log('Next: ' + x);
+    console.log('Next interval: ' + x.interval);
+    console.log('Count: ' + (x.value + 1));
   },
   function (err) {
     console.log('Error: ' + err);
