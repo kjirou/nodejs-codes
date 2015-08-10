@@ -13,6 +13,9 @@ var assert = require('assert');
 function Super () {
 }
 Super.prototype.foo = 1;
+Super.prototype.getConstructor = function() {
+  return this.constructor;
+};
 
 function Sub () {
 }
@@ -31,6 +34,19 @@ assert(SubSub.super_ === Sub);
 var sub = new Sub();
 
 assert(sub.foo === 1);
+
+
+// this.constructor も変わらない！
+(function() {
+  var super_ = new Super();
+  assert(super_.getConstructor() === Super);
+
+  var sub = new Sub();
+  assert(sub.getConstructor() === Sub);
+
+  var subSub = new SubSub();
+  assert(subSub.getConstructor() === SubSub);
+})();
 
 
 // オマケ: サブクラスの判定方法
