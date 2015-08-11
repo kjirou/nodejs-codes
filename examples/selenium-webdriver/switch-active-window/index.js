@@ -46,10 +46,10 @@ webdriver.promise.fulfilled()
     return driver.switchTo().window(windowHandles[1]);
   })
   .then(function() {
-    return driver.getCurrentUrl();
+    return driver.getPageSource();
   })
-  .then(function(url) {
-    assert(url.match('page-2.html$'));
+  .then(function(html) {
+    assert(html.match('<h1>page-2</h1>'));
   })
   .then(function() {
     driver.quit();
