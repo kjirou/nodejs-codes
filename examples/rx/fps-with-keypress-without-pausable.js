@@ -9,19 +9,12 @@ var Rx = require('rx');
 // 2. 1 frame 内では、最初の 1 keypress だけ有効にする, 同frameの他keypressは破棄
 // 3. 別途 timer のみを解釈する subscriber を定義する
 //
-// ----------------------
+// -------
 //
-// !! 動くように見えるけどダメ !!
+// 何故 pausable を使わないかは、他ファイル参照
 //
-// - キーを連打すると、timerStream が止まることがある
-// - かつ、keypress の subscribe 内で key が undefined になることもあった
-//
-// ----------------------
-//
-// やったこと:
-//
-// - pauser.isStopped で止まってる時しか止めない
-// - keypress 外してみたけどダメだった
+// これだと、いくらキーを叩いても timerSource が止まらない
+// ..ただ、これで RxJS を使う意味あるのかは知らんが..
 //
 
 var FPS = 2;
@@ -66,32 +59,20 @@ var fromStreamForKeypress = function (stream, finishEventName) {
 
 keypress(process.stdin);
 process.stdin.setRawMode(true);
-//process.stdin.resume();
-
-var pauser = new Rx.Subject();
+process.stdin.resume();
 
 var timerSource = Rx.Observable
   .timer(0, MPF)
   .timeInterval()
 ;
 
-//var keypressSource = fromStreamForKeypress(process.stdin).pausable(pauser);
-var keypressSource = fromStreamForKeypress(process.stdin).pausable();
-
-// !! 一度 キーを押すと、その後はそれが永遠に出力されてしまう
-//var source = timerSource.withLatestFrom(
-//  keypressSource,
-//  function (timerData, key) {
-//    console.log('*Key Input*');
-//    return key;
-//  }
-//);
+var isPausedKeypress = false;
+var keypressSource = fromStreamForKeypress(process.stdin);
 
 
 timerSource.subscribe(
   function(timerData) {
-    //pauser.onNext(true);
-    keypressSource.resume();
+    isPausedKeypress = false;
     console.log('Frame count:', timerData.value);
   },
   function (err) {
@@ -101,14 +82,13 @@ timerSource.subscribe(
 
 keypressSource.subscribe(
   function (key) {
-    if (!pauser.isStopped) {
-      //pauser.onNext(false);
-      keypressSource.pause();
-      console.log('Paused keypress');
-    }
-    console.log('Input key:', key.name);
-    if (key && key.ctrl && key.name === "c") {
-      process.exit(0);
+    if (!isPausedKeypress) {
+      isPausedKeypress = true;
+      console.log('Input key:', key.name);
+      if (key && key.ctrl && key.name === "c") {
+        process.stdin.pause();
+        process.exit(0);
+      }
     }
   },
   function (err) {
@@ -118,14 +98,3 @@ keypressSource.subscribe(
     console.log('Completed');
   }
 );
-
-//pauser.subscribe(
-//  function(bool) {
-//    console.log('onNext:', bool);
-//  },
-//  function (err) {
-//    console.log('Error(pauser): ' + err);
-//  }
-//);
-
-//pauser.onNext(true);
