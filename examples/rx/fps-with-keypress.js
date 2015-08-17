@@ -9,8 +9,15 @@ var Rx = require('rx');
 // 2. 1 frame 内では、最初の 1 keypress だけ有効にする, 同frameの他keypressは破棄
 // 3. 別途 timer のみを解釈する subscriber を定義する
 //
+// ----------------------
+//
+// !! 動くように見えるけどダメ !!
+//
+// - キーを連打すると、timerStream が止まることがある
+// - かつ、keypress の subscribe 内で key が undefined になることもあった
+//
 
-var FPS = 1;
+var FPS = 2;
 var MPF = 1000 / FPS;  // Milliseconds Per Frame?
 
 //
@@ -52,13 +59,17 @@ var fromStreamForKeypress = function (stream, finishEventName) {
 
 keypress(process.stdin);
 process.stdin.setRawMode(true);
-process.stdin.resume();
+//process.stdin.resume();
 
-var pauser = new Rx.Subject();;
+var pauser = new Rx.Subject();
+
 var timerSource = Rx.Observable
-  .interval(MPF)
+  .timer(0, MPF)
+  .timeInterval()
 ;
-var keypressSource = fromStreamForKeypress(process.stdin).pausable(pauser);
+
+//var keypressSource = fromStreamForKeypress(process.stdin).pausable(pauser);
+var keypressSource = fromStreamForKeypress(process.stdin).pausable();
 
 // !! 一度 キーを押すと、その後はそれが永遠に出力されてしまう
 //var source = timerSource.withLatestFrom(
@@ -69,15 +80,26 @@ var keypressSource = fromStreamForKeypress(process.stdin).pausable(pauser);
 //  }
 //);
 
-timerSource.subscribe(function(timerData) {
-  pauser.onNext(true);
-  console.log('timerCount:', timerData);
-});
+
+timerSource.subscribe(
+  function(timerData) {
+    //pauser.onNext(true);
+    keypressSource.resume();
+    console.log('Frame count:', timerData.value);
+  },
+  function (err) {
+    console.log('Error(timerSource): ' + err);
+  }
+);
 
 keypressSource.subscribe(
   function (key) {
-    pauser.onNext(false);
-    console.log('key.name:', key.name);
+    if (!pauser.isStopped) {
+      //pauser.onNext(false);
+      keypressSource.pause();
+      console.log('Paused keypress');
+    }
+    console.log('Input key:', key.name);
     if (key && key.ctrl && key.name === "c") {
       process.exit(0);
     }
@@ -87,5 +109,16 @@ keypressSource.subscribe(
   },
   function () {
     console.log('Completed');
-  })
-;
+  }
+);
+
+//pauser.subscribe(
+//  function(bool) {
+//    console.log('onNext:', bool);
+//  },
+//  function (err) {
+//    console.log('Error(pauser): ' + err);
+//  }
+//);
+
+//pauser.onNext(true);
