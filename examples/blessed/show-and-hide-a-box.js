@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 
+//
+// Box の表示と非表示
+// またその際にアクティブウィンドウ的な状態が（あれば）どうなるか
+//
+
 var blessed = require('blessed');
 
 
-var screen = blessed.screen();
+var screen = blessed.screen({
+  debug: true
+});
+screen.title = 'Show And Hide A Box';
 
-screen.title = 'my window title';
-
-// Create a box perfectly centered horizontally and vertically.
 var box = blessed.box({
   top: 'center',
   left: 'center',
@@ -29,34 +34,25 @@ var box = blessed.box({
     }
   }
 });
-
-// Append our box to the screen.
 screen.append(box);
 
-//// Add a png icon to the box
-//var icon = blessed.image({
-//  parent: box,
-//  top: 0,
-//  left: 0,
-//  type: 'overlay',
-//  width: 'shrink',
-//  height: 'shrink',
-//  file: __dirname + '/my-program-icon.png',
-//  search: false
-//});
 
-// If our box is clicked, change the content.
-box.on('click', function(data) {
-  box.setContent('{center}Some different {red-fg}content{/red-fg}.{/center}');
-  screen.render();
-});
-
-// If box is focused, handle `enter`/`return` and give us some more content.
 box.key('enter', function(ch, key) {
   box.setContent('{right}Even different {black-fg}content{/black-fg}.{/right}\n');
   box.setLine(1, 'bar');
   box.insertLine(1, 'foo');
   screen.render();
+});
+
+// Toggle showing or hiding
+screen.key('space', function(ch, key) {
+  screen.debug('A box is', box.visible ? 'visible' : 'hidden');
+  if (box.visible) {
+    box.hide();
+  } else {
+    box.show();
+  }
+  screen.debug('A box is changed to', box.visible ? 'visible' : 'hidden');
 });
 
 // Quit on Escape, q, or Control-C.
