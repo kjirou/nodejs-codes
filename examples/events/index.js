@@ -9,4 +9,4 @@ emitter.on('foo', function() {
 });
 
 var emitter2 = new EventEmitter();
-emitter.emit('foo');
+emitter2.emit('foo');  // Not emitted
