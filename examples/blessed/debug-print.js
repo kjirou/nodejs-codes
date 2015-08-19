@@ -32,7 +32,10 @@ var container = blessed.box({
   content: 'Push F12 to show debug print'
 });
 
-screen.key(['escape', 'q', 'C-c'], function(ch, key) {
+// 'q' を押しても toggle するが、意図はしてないみたいだけどバグというほどでもなかった
+// Ref) https://github.com/kjirou/nodejs-codes/issues/1
+
+screen.key(['escape', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
 
