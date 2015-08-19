@@ -61,18 +61,28 @@ keypress(process.stdin);
 process.stdin.setRawMode(true);
 process.stdin.resume();
 
+var isPausedKeypress = false;
+
 var timerSource = Rx.Observable
   .timer(0, MPF)
   .timeInterval()
+  .map(function(data) {
+    isPausedKeypress = false;
+    return data;
+  })
 ;
 
-var isPausedKeypress = false;
-var keypressSource = fromStreamForKeypress(process.stdin);
+var keypressSource = fromStreamForKeypress(process.stdin)
+  .filter(function(data) {
+    var isPassable = !isPausedKeypress;
+    isPausedKeypress = true;
+    return isPassable;
+  })
+;
 
 
 timerSource.subscribe(
   function(timerData) {
-    isPausedKeypress = false;
     console.log('Frame count:', timerData.value);
   },
   function (err) {
@@ -82,13 +92,10 @@ timerSource.subscribe(
 
 keypressSource.subscribe(
   function (key) {
-    if (!isPausedKeypress) {
-      isPausedKeypress = true;
-      console.log('Input key:', key.name);
-      if (key && key.ctrl && key.name === "c") {
-        process.stdin.pause();
-        process.exit(0);
-      }
+    console.log('Input key:', key.name);
+    if (key && key.ctrl && key.name === "c") {
+      process.stdin.pause();
+      process.exit(0);
     }
   },
   function (err) {
