@@ -6,7 +6,7 @@ var assert = require('assert');
 
 var colored, stripped;
 
-colored = chalk.magenta('12345');
+colored = chalk.magenta('1\s2\t3\n4\r5');
 console.log(colored);
 console.log(JSON.stringify(colored));
 console.log(colored.length);
