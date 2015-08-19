@@ -7,10 +7,20 @@
 // ```
 // render() - Write content and children to the screen buffer.
 // ```
-// と書いてあるので、出来そうではある
+// と書いてあるので、出来そうではある。
+//
+// 結論として、今のところは element.render の後に
+// ```
+// screen.draw(startRowIndex, endRowIndex)
+// ```
+// を行う、という方法しか見つかっていない。
+//
+// 最悪はそれを使うとして、質問も投げてみた:
+//
+// https://github.com/chjj/blessed/issues/169
+//
 //
 // TODO:
-// - そもそも可能なのか？
 // - アプリ作ってて、座標が取れない的なエラーに成ったことがあるのでその再現
 //
 
