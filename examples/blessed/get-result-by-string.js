@@ -3,11 +3,14 @@
 //
 // 出力をバッファではなく文字列で取得したい
 //
-// テストを見ると https://github.com/chjj/blessed/blob/master/test/widget.js
-// 外部出力した .log をとっているみたい
+// TODO:
+// - screen を生成しても表示をバッファ状態にしない
+//   - drawとか見ればある？
 //
 
 var blessed = require('blessed');
+var chalk = require('chalk');
+var jsesc = require('jsesc');
 
 
 // この screen オブジェクト生成時点で、バッファ状態に遷移する
@@ -24,22 +27,52 @@ screen.key(['escape', 'C-c'], function(ch, key) {
 });
 
 // 制御を戻す例その2
-// leave ってのもあった
 screen.key('d', function() {
   screen.destroy();
   console.log('After destroying');  // 出力される
 });
 
+// 制御を戻す例その3
+// - これが一番良い
+// - leave 中か enter 中かのフラグは、this.program.isAlt みたい
+screen.key('l', function() {
+  screen.leave();  // 画面は消える
+  console.log('After leaving');  // 出力され、プロセスは落ちない
+  setTimeout(function() {
+    screen.enter();
+    console.log('After entering');  // これは出力されない、謎
+    setTimeout(function() {
+      screen.render();
+    }, 500);
+  }, 1000);
+});
+
+// alloc は表示を消すだけ
+// relloc はまだリリースされていない
+//screen.key('a', function() {
+//  screen.alloc();
+//  console.log('After allocating');
+//});
+
+//
 // screenshot で文字列で取得できる、色付き
+//
+// テストだと: https://github.com/chjj/blessed/blob/master/test/widget.js
+// 外部出力した .log から出力をとっているみたい？
+// これでも充分なように見える
+//
 screen.key('s', function() {
   // xi, xl, yi, yl
   //   ||
   // columnIndex, columnLength, rowIndex, rowLength
   var text = screen.screenshot(2, 5, 0, 1);
-  screen.debug(text);
-  screen.debug(text.length);
-  screen.debug(text.toString());
-  screen.debug(text === '345');
+  var cleaned = chalk.stripColor(text);
+  screen.debug('----');
+  screen.debug(text, 'is ' + text.length + ' length');
+  screen.debug('----');
+  screen.debug(cleaned, 'is ' + cleaned.length + ' length');
+  screen.debug('----');
+  screen.debug(jsesc(chalk.stripColor(text)) === '345\\n');
 });
 
 var container = blessed.box({
