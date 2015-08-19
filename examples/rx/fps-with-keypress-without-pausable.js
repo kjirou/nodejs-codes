@@ -9,53 +9,17 @@ var Rx = require('rx');
 // 2. 1 frame 内では、最初の 1 keypress だけ有効にする, 同frameの他keypressは破棄
 // 3. 別途 timer のみを解釈する subscriber を定義する
 //
+// Refs:
+// https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/events.md
+// https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/fromeventpattern.md
+//
 // -------
 //
 // 何故 pausable を使わないかは、他ファイル参照
 //
-// これだと、いくらキーを叩いても timerSource が止まらない
-// ..ただ、これで RxJS を使う意味あるのかは知らんが..
-//
 
 var FPS = 2;
 var MPF = 1000 / FPS;  // Milliseconds Per Frame?
-
-//
-// Copy from:
-//   https://raw.githubusercontent.com/Reactive-Extensions/rx-node/master/index.js
-//
-var fromStreamForKeypress = function (stream, finishEventName) {
-  stream.pause();
-
-  finishEventName || (finishEventName = 'end');
-
-  return Rx.Observable.create(function (observer) {
-    function dataHandler (chr, key) {
-      // 引数はひとつしか送れないみたい
-      observer.onNext(key);
-    }
-
-    function errorHandler (err) {
-      observer.onError(err);
-    }
-
-    function endHandler () {
-      observer.onCompleted();
-    }
-
-    stream.addListener('keypress', dataHandler);
-    stream.addListener('error', errorHandler);
-    stream.addListener(finishEventName, endHandler);
-
-    stream.resume();
-
-    return function () {
-      stream.removeListener('keypress', dataHandler);
-      stream.removeListener('error', errorHandler);
-      stream.removeListener(finishEventName, endHandler);
-    };
-  }).publish().refCount();
-};
 
 keypress(process.stdin);
 process.stdin.setRawMode(true);
@@ -72,7 +36,19 @@ var timerSource = Rx.Observable
   })
 ;
 
-var keypressSource = fromStreamForKeypress(process.stdin)
+// これだと、(chr, key) の第一引数の chr しか取れない
+//var keypressSource = Rx.Observable.fromEvent(process.stdin, 'keypress')
+var keypressSource = Rx.Observable
+  .fromEventPattern(
+    function addHandler(handler) {
+      process.stdin.addListener('keypress', function(chr, key) {
+        handler(key);
+      });
+    },
+    function removeHandelr(handler) {
+      process.stdin.removeListener('keypress', handler);
+    }
+  )
   .filter(function(data) {
     var isPassable = !isPausedKeypress;
     isPausedKeypress = true;
@@ -93,7 +69,7 @@ timerSource.subscribe(
 keypressSource.subscribe(
   function (key) {
     console.log('Input key:', key.name);
-    if (key && key.ctrl && key.name === "c") {
+    if (key && key.ctrl && key.name === "c" || key === "q") {
       process.stdin.pause();
       process.exit(0);
     }
