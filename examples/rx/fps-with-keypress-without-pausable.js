@@ -12,6 +12,7 @@ var Rx = require('rx');
 // Refs:
 // https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/events.md
 // https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/fromeventpattern.md
+// https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/pausable.md
 //
 // -------
 //
@@ -25,34 +26,42 @@ keypress(process.stdin);
 process.stdin.setRawMode(true);
 process.stdin.resume();
 
-var isPausedKeypress = false;
+//var isPausedKeypress = false;
+var pauser = new Rx.Subject();
 
 var timerSource = Rx.Observable
   .timer(0, MPF)
   .timeInterval()
   .map(function(data) {
-    isPausedKeypress = false;
+    // onNext を subscribe 内で行ったら、連打したりするとバグるようになった
+    pauser.onNext(true);
     return data;
   })
 ;
 
 // これだと、(chr, key) の第一引数の chr しか取れない
 //var keypressSource = Rx.Observable.fromEvent(process.stdin, 'keypress')
+var handlerKeeping;
 var keypressSource = Rx.Observable
   .fromEventPattern(
     function addHandler(handler) {
-      process.stdin.addListener('keypress', function(chr, key) {
+      console.log(process.stdin.listeners.length);  // 常に 1
+      handlerKeeping = function(chr, key) {
         handler(key);
-      });
+      };
+      process.stdin.addListener('keypress', keptHandler);
     },
     function removeHandelr(handler) {
-      process.stdin.removeListener('keypress', handler);
+      process.stdin.removeListener('keypress', handlerKeeping);
+      // またはこっちでも
+      //process.stdin.removeAllListeners('keypress');
     }
   )
-  .filter(function(data) {
-    var isPassable = !isPausedKeypress;
-    isPausedKeypress = true;
-    return isPassable;
+  .pausable(pauser)
+  .filter(function() {
+    var isStopped = pauser.isStopped;
+    pauser.onNext(false);
+    return !isStopped;
   })
 ;
 
