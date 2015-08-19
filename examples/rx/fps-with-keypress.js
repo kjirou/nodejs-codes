@@ -9,123 +9,79 @@ var Rx = require('rx');
 // 2. 1 frame 内では、最初の 1 keypress だけ有効にする, 同frameの他keypressは破棄
 // 3. 別途 timer のみを解釈する subscriber を定義する
 //
-// ----------------------
+// Refs:
+// https://github.com/Reactive-Extensions/RxJS/blob/master/doc/gettingstarted/events.md
+// https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/fromeventpattern.md
+// https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/pausable.md
 //
-// !! 動くように見えるけどダメ !!
+// -------
 //
-// - キーを連打すると、timerStream が止まることがある
-// - かつ、keypress の subscribe 内で key が undefined になることもあった
-//
-// ----------------------
-//
-// やったこと:
-//
-// - pauser.isStopped で止まってる時しか止めない
-// - keypress 外してみたけどダメだった
+// 何故 pausable を使わないかは、他ファイル参照
 //
 
 var FPS = 2;
-var MPF = 1000 / FPS;  // Milliseconds Per Frame?
-
-//
-// Copy from:
-//   https://raw.githubusercontent.com/Reactive-Extensions/rx-node/master/index.js
-//
-var fromStreamForKeypress = function (stream, finishEventName) {
-  stream.pause();
-
-  finishEventName || (finishEventName = 'end');
-
-  return Rx.Observable.create(function (observer) {
-    function dataHandler (chr, key) {
-      // 引数はひとつしか送れないみたい
-      observer.onNext(key);
-    }
-
-    function errorHandler (err) {
-      observer.onError(err);
-    }
-
-    function endHandler () {
-      observer.onCompleted();
-    }
-
-    stream.addListener('keypress', dataHandler);
-    stream.addListener('error', errorHandler);
-    stream.addListener(finishEventName, endHandler);
-
-    stream.resume();
-
-    return function () {
-      stream.removeListener('keypress', dataHandler);
-      stream.removeListener('error', errorHandler);
-      stream.removeListener(finishEventName, endHandler);
-    };
-  }).publish().refCount();
-};
 
 keypress(process.stdin);
 process.stdin.setRawMode(true);
-//process.stdin.resume();
+process.stdin.resume();
 
 var pauser = new Rx.Subject();
 
 var timerSource = Rx.Observable
-  .timer(0, MPF)
+  .timer(0, 1000 / FPS)
   .timeInterval()
+  .map(function(data) {
+    // onNext を subscribe 内で行ったら、連打したりするとバグるようになった
+    pauser.onNext(true);
+    return data;
+  })
 ;
 
-//var keypressSource = fromStreamForKeypress(process.stdin).pausable(pauser);
-var keypressSource = fromStreamForKeypress(process.stdin).pausable();
-
-// !! 一度 キーを押すと、その後はそれが永遠に出力されてしまう
-//var source = timerSource.withLatestFrom(
-//  keypressSource,
-//  function (timerData, key) {
-//    console.log('*Key Input*');
-//    return key;
-//  }
-//);
+// これだと、(chr, key) の第一引数の chr しか取れない
+//var keypressSource = Rx.Observable.fromEvent(process.stdin, 'keypress')
+var wrappedHandler;
+var keypressSource = Rx.Observable
+  .fromEventPattern(
+    function addHandler(handler) {
+      console.log(process.stdin.listeners.length);  // 常に 1
+      wrappedHandler = function(chr, key) {
+        handler(key);
+      };
+      process.stdin.addListener('keypress', wrappedHandler);
+    },
+    function removeHandelr(handler) {
+      process.stdin.removeListener('keypress', wrappedHandler);
+      // またはこっちでも
+      //process.stdin.removeAllListeners('keypress');
+    }
+  )
+  .pausable(pauser)
+  .filter(function() {
+    var isStopped = pauser.isStopped;
+    pauser.onNext(false);
+    return !isStopped;
+  })
+;
 
 
 timerSource.subscribe(
-  function(timerData) {
-    //pauser.onNext(true);
-    keypressSource.resume();
-    console.log('Frame count:', timerData.value);
-  },
-  function (err) {
-    console.log('Error(timerSource): ' + err);
-  }
+  function(data) {
+    console.log('Frame count:', data.value);
+  }//,
+  //function (err) {
+  //  console.log('Error(timerSource): ' + err);
+  //}
 );
 
 keypressSource.subscribe(
   function (key) {
-    if (!pauser.isStopped) {
-      //pauser.onNext(false);
-      keypressSource.pause();
-      console.log('Paused keypress');
-    }
     console.log('Input key:', key.name);
     if (key && key.ctrl && key.name === "c") {
+      process.stdin.pause();
       process.exit(0);
     }
-  },
-  function (err) {
-    console.log('Error: ' + err);
-  },
-  function () {
-    console.log('Completed');
-  }
+  }//,
+  //function (err) {
+  //  console.log('Error: ' + err);
+  //}
 );
-
-//pauser.subscribe(
-//  function(bool) {
-//    console.log('onNext:', bool);
-//  },
-//  function (err) {
-//    console.log('Error(pauser): ' + err);
-//  }
-//);
-
-//pauser.onNext(true);
