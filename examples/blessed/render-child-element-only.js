@@ -3,6 +3,20 @@
 //
 // 描画は子要素のrenderでも行うことができるのか
 //
+// 質問したら https://github.com/chjj/blessed/issues/169
+// その方法は非推奨で、もし速度が欲しいなら以下を使ってくれとのこと
+//
+// ----
+// - Detach the element from its parent, append it to the parent's parent,
+//     and reposition it properly (and then hide() the original parent when you want).
+// - Create a Layout element, which uses a custom renderer,
+//     to check something like a noRenderParent flag on an element (see the readme for an example of a renderer).
+//   It would be a little hacky since you would have to recursively iterate over all children in the renderer
+//     (element.forDescendants()) and check for the option.
+// - Remove all content and style from the parent element.
+// - Create a duplicate element behind the parent which is displayed when the parent is detached.
+// ----
+//
 // READMEには:
 // ```
 // render() - Write content and children to the screen buffer.
@@ -14,10 +28,6 @@
 // screen.draw(startRowIndex, endRowIndex)
 // ```
 // を行う、という方法しか見つかっていない。
-//
-// 最悪はそれを使うとして、質問も投げてみた:
-//
-// https://github.com/chjj/blessed/issues/169
 //
 //
 // TODO:
