@@ -1,0 +1,10 @@
+{
+  "name": "show_ping",
+  "private": true,
+  "fluct": {
+    "contentType": "text/html",
+    "httpMethod": "GET",
+    "path": "/ping",
+    "statusCode": 200
+  }
+}
