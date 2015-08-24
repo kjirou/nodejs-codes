@@ -51,6 +51,15 @@ webdriver.promise.fulfilled()
     console.log('"input[type="number"][min="5"]" is', elements.length);
   })
   .then(function() {
+    return driver.findElement({ linkText: 'link-text-wrapped-by-span' });
+  })
+  .then(function(el) {
+    return el.getInnerHtml();
+  })
+  .then(function(html) {
+    console.log('<span>link-text-wrapped-by-span</span> is', html);
+  })
+  .then(function() {
     driver.quit();
   })
 ;
