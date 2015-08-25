@@ -10,6 +10,7 @@
     "blessed": "0.1.21",
     "bluebird": "2.3.2",
     "chalk": "1.1.0",
+    "circleci": "^0.2.0",
     "colors": "1.0.3",
     "concat-stream": "1.4.6",
     "deepmerge": "0.2.7",

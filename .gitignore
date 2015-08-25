@@ -36,3 +36,4 @@ testem.*.*.*.json
 
 
 aws-config.json
+circleci-config.json

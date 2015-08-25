@@ -1,0 +1,4 @@
+{
+  // https://circleci.com/account/api
+  "auth": "My_auth_token"
+}
