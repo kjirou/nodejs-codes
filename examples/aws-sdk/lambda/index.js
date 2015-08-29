@@ -37,9 +37,6 @@ var AWS = require('aws-sdk');
 var _ = require('lodash');
 
 var awsConfig = require('./aws-config.json');
-awsConfig = _.assign({}, awsConfig, {
-  region: 'ap-northeast-1'
-});
 
 var lambda = new AWS.Lambda(awsConfig);
 
