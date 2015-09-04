@@ -10,6 +10,9 @@ import assert from 'assert';
 let a = 1;
 //const a = 2;  // TypeError: Duplicate declaration "a"
 
+const i = 1;
+//i = 2;  // SyntaxError: "i" is read-only
+
 function returnLetVar() {
   let x = 1
   return x;
