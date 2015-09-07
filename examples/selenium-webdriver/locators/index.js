@@ -59,6 +59,19 @@ webdriver.promise.fulfilled()
   .then(function(html) {
     console.log('<span>link-text-wrapped-by-span</span> is', html);
   })
+  // css の > セレクタ
+  .then(function() {
+    return driver.findElements({ css: '.a-parent > .a-child' });
+  })
+  .then(function(els) {
+    console.log('".a-parent > .a-child" is ', els.length);
+  })
+  .then(function() {
+    return driver.findElements({ css: '.a-parent > .a-grandchild' });
+  })
+  .then(function(els) {
+    console.log('".a-parent > .a-grandchild" is ', els.length);
+  })
   .then(function() {
     driver.quit();
   })
