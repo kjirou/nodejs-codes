@@ -5,18 +5,6 @@
 // flow check
 // ```
 //
-// Manage checker server
-// ```
-// flow start
-// flow stop
-// ```
-//
-// Compile to vanilla js
-// ```
-// jstransform --strip-types --harmony src/ build/
-// jstransform --strip-types --harmony --watch src/ build/
-// ```
-//
 
 function foo(x) {
   return x * 10;
