@@ -43,7 +43,7 @@
     "random-word-generator": "0.9.9",
     "react": "0.14.0-beta3",
     "rewire": "2.1.4",
-    "rx": "2.5.3",
+    "rx": "^3.1.2",
     "s3": "4.4.0",
     "selenium-webdriver": "2.44.0",
     "should": "4.4.1",
