@@ -19,3 +19,8 @@ process.stdin.setRawMode(true);
 
 // 入力待ち
 process.stdin.resume();
+
+// 能動発火
+//setTimeout(function() {
+//  process.stdin.emit('keypress', '_ch', { name: '_key' });
+//}, 1000);
