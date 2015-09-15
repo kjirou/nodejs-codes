@@ -59,6 +59,17 @@ webdriver.promise.fulfilled()
   .then(function(html) {
     console.log('<span>link-text-wrapped-by-span</span> is', html);
   })
+
+  .then(function() {
+    return driver.findElement({ linkText: 'めちゃくちゃ長い日本語リンクテキストが取れないことがあったので検証' });
+  })
+  .then(function(el) {
+    return el.getInnerHtml();
+  })
+  .then(function(html) {
+    console.log(html + ' リンクが linkText で抽出できている');
+  })
+
   // css の > セレクタ
   .then(function() {
     return driver.findElements({ css: '.a-parent > .a-child' });
