@@ -37,10 +37,20 @@ blessed.image({
   left: 0,
   // "ansi"(default) or "overlay"(use w3m browser)
   // "overlay" の方、brew install w3m の後にやってみたけど動かない..
-  type: 'overlay',
+  //type: 'overlay',
   width: 'shrink',
   height: 'shrink',
-  file: __dirname + '/images/treasure_box.png',
+  file: __dirname + '/images/dragon-16x16.png',
+  search: false
+});
+
+blessed.image({
+  parent: container,
+  top: 0,
+  left: 17,
+  width: 'shrink',
+  height: 'shrink',
+  file: __dirname + '/images/treasure_box-32x32.png',
   search: false
 });
 
