@@ -31,3 +31,13 @@ function stringifyObj({ x: xVar, y: yVar }) {
   return xVar + yVar;
 }
 assert.strictEqual(stringifyObj({ x: 'foo', y: 'bar' }), 'foobar');
+
+
+//
+// 分割代入内で初期値を設定する
+//
+function useDefault({ x, y = 3 }) {
+  return x * y;
+}
+assert.strictEqual(useDefault({ x: 2}), 6);
+assert.strictEqual(useDefault({ x: 2, y: 4}), 8);
