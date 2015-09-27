@@ -40,6 +40,7 @@
     "npm": "2.14.1",
     "object-path": "0.9.2",
     "over": "0.0.5",
+    "pagination": "0.4.4",
     "postcss": "5.0.4",
     "power-assert": "0.10.2",
     "random-word-generator": "0.9.9",
