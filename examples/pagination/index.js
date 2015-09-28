@@ -16,6 +16,9 @@ var objectList = [
 
 var paginator, paginated;
 
+//
+// basic usage
+//
 paginator = new SearchPaginator({
   totalResult: objectList.length,
   rowsPerPage: 2,
@@ -23,7 +26,7 @@ paginator = new SearchPaginator({
 });
 paginated = paginator.getPaginationData();
 
-console.log(paginated);
+//console.log(paginated);
 assert.strictEqual(paginated.pageCount, 3);
 assert.strictEqual(paginated.fromResult, 1);
 assert.strictEqual(paginated.toResult, 2);
@@ -31,3 +34,22 @@ assert.strictEqual(paginated.previous, null);
 assert.strictEqual(paginated.next, 2);
 assert.strictEqual(paginated.first, null);
 assert.strictEqual(paginated.last, 3);
+
+//
+// set current page number to out of range
+//
+paginator = new SearchPaginator({
+  totalResult: objectList.length,
+  rowsPerPage: 2,
+  current: 100,
+});
+paginated = paginator.getPaginationData();
+assert.strictEqual(paginated.current, 3);  // Not overflow
+
+paginator = new SearchPaginator({
+  totalResult: objectList.length,
+  rowsPerPage: 2,
+  current: -100,
+});
+paginated = paginator.getPaginationData();
+assert.strictEqual(paginated.current, -100);  // Overflow!
