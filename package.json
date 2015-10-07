@@ -30,7 +30,7 @@
     "jsonschema": "1.0.2",
     "jstransform": "11.0.3",
     "keypress": "0.2.1",
-    "lodash": "2.4.1",
+    "lodash": "3.10.1",
     "maze-generator": "0.1.2",
     "minimist": "1.1.0",
     "mkdirp": "0.5.1",
