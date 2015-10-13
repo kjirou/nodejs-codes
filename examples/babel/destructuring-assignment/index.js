@@ -55,10 +55,12 @@ let requirementWithOptions = {
 const {
   requirementA,
   requirementB,
+  requirementButNotExisted,
   ...options,
 } = requirementWithOptions;
 assert.strictEqual(requirementA, 1);
 assert.strictEqual(requirementB, 2);
+assert.strictEqual(requirementButNotExisted, undefined);
 assert.deepEqual(options, {
   a: 11,
   b: 22,
