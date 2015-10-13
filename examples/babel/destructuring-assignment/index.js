@@ -41,3 +41,25 @@ function useDefault({ x, y = 3 }) {
 }
 assert.strictEqual(useDefault({ x: 2}), 6);
 assert.strictEqual(useDefault({ x: 2, y: 4}), 8);
+
+
+//
+// 
+//
+let requirementWithOptions = {
+  requirementA: 1,
+  requirementB: 2,
+  a: 11,
+  b: 22,
+};
+const {
+  requirementA,
+  requirementB,
+  ...options,
+} = requirementWithOptions;
+assert.strictEqual(requirementA, 1);
+assert.strictEqual(requirementB, 2);
+assert.deepEqual(options, {
+  a: 11,
+  b: 22,
+});
