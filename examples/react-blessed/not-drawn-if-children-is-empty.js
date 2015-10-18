@@ -26,13 +26,14 @@ class Root extends Component {
       todos: [
         { id: 1, title: 'Foo' },
         { id: 2, title: 'Bar' },
-        { id: 3, title: 'Baz' }
-      ]
+        { id: 3, title: 'Baz' },
+      ],
     };
   }
 
   componentDidMount() {
-    this.refs.first.key(['g'], (ch, key) => {
+    // Push "r" key to remove the last row
+    this.refs.first.key(['r'], (ch, key) => {
       const newTodos = this.state.todos.slice(0, this.state.todos.length - 1)
       screen.debug('todos:', newTodos.length);
       this.setState({
@@ -49,8 +50,8 @@ class Root extends Component {
         ref: 'first',
         top: 0,
         left: 0,
-        width: 20,
-        height: 10,
+        width: 10,
+        height: 5,
         style: {
           fg: 'white',
           bg: 'blue',
@@ -61,6 +62,7 @@ class Root extends Component {
           return <box {...{
             key: 'row-' + i,
             top: i,
+            height: 1,
             content: todo.id + todo.title,
           }} />;
         })
