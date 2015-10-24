@@ -45,18 +45,22 @@
       // ```
       //
       // onClick発火:
+      //
       // 同期で連続実行された場合は、最後のstateで一度だけrenderが実行
       // ```
       // Root.render: setState3
       // ```
       //
       // setTimeout発火:
+      //
       // この中で同期で連続実行された場合は、全てのrenderが実行
+      // DOM自体も実際に書き換わっていた(on Chrome)
       // ```
       // Root.render: setState4
       // Root.render: setState5
       // Root.render: setState6
       // ```
+      //
       //
       // ----
       //
