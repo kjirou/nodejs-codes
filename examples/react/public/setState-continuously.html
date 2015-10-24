@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="content"></div>
+    <script type="text/babel">
+
+      class Root extends React.Component {
+        constructor() {
+          super();
+          this.state = { content: 'root' };
+        }
+
+        onClick(evt) {
+          this.setState({ content: 'setState1' });
+          this.setState({ content: 'setState2' });
+          this.setState({ content: 'setState3' });
+          setTimeout(() => {
+            this.setState({ content: 'setState4' });
+            this.setState({ content: 'setState5' });
+            this.setState({ content: 'setState6' });
+          }, 1000);
+        }
+
+        render() {
+          console.log('Root.render:', this.state.content);
+          return <div
+            key='root'
+            id='root'
+            onClick={this.onClick.bind(this)}
+          >{ this.state.content }</div>;
+        }
+      }
+
+      //
+      // 画面表示時:
+      //
+      // ```
+      // Root.render: root
+      // ```
+      //
+      // onClick発火:
+      // 同期で連続実行された場合は、最後のstateで一度だけrenderが実行
+      // ```
+      // Root.render: setState3
+      // ```
+      //
+      // setTimeout発火:
+      // この中で同期で連続実行された場合は、全てのrenderが実行
+      // ```
+      // Root.render: setState4
+      // Root.render: setState5
+      // Root.render: setState6
+      // ```
+      //
+      // ----
+      //
+      // サーバサイドの renderToStaticMarkup でも setTimeout 内は同じ挙動だったので
+      // こういう仕様っぽい
+      //
+      ReactDOM.render(<Root />, window.document.querySelector('#content'));
+    </script>
+  </body>
+</html>
