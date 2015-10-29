@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 
-class Root extends Component {
+class Foo extends Component {
 
   render() {
     const items = [1, 2].map((v) => {
@@ -17,5 +17,16 @@ class Root extends Component {
   }
 }
 
-const html = renderToStaticMarkup(<Root />);
-assert.strictEqual(html, '<div><div>1</div><div>2</div></div>');
+const fooHtml = renderToStaticMarkup(<Foo />);
+assert.strictEqual(fooHtml, '<div><div>1</div><div>2</div></div>');
+
+
+class Bar extends Component {
+
+  render() {
+    return <div>{ [] }</div>;
+  }
+}
+
+const barHtml = renderToStaticMarkup(<Bar />);
+assert.strictEqual(barHtml, '<div></div>');
