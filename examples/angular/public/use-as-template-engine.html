@@ -19,6 +19,15 @@
         this.todos.push(todo);
         this.emit('change');
       };
+      TodoListModel.prototype.archive = function(todo) {
+        var oldTodos = this.todos;
+        this.todos = [];
+        var that = this;
+        oldTodos.forEach(function(todo) {
+          if (!todo.done) that.todos.push(todo);
+        });
+        this.emit('change');
+      };
 
       var todoListModel = new TodoListModel();
       Object.assign(todoListModel, EventEmitter.prototype);
@@ -43,11 +52,12 @@
           };
 
           this.archive = function() {
-            var oldTodos = this.todos;
-            this.todos = [];
-            angular.forEach(oldTodos, function(todo) {
-              if (!todo.done) this.todos.push(todo);
-            });
+            todoListModel.archive();
+            //var oldTodos = this.todos;
+            //this.todos = [];
+            //angular.forEach(oldTodos, function(todo) {
+            //  if (!todo.done) this.todos.push(todo);
+            //});
           };
 
           var that = this;
