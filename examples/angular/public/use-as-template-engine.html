@@ -1,0 +1,79 @@
+<!doctype html>
+<html ng-app="todoApp">
+  <head>
+    <script src="./EventEmitter.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <style>
+      .done-true {
+        text-decoration: line-through;
+        color: grey;
+      }
+    </style>
+    <script>
+      var TodoListModel = function() {
+        this.todos = [
+          {text:'learn angular', done:true},
+          {text:'build an angular app', done:false}];
+      };
+      TodoListModel.prototype.addTodo = function(todo) {
+        this.todos.push(todo);
+        this.emit('change');
+      };
+
+      var todoListModel = new TodoListModel();
+      Object.assign(todoListModel, EventEmitter.prototype);
+
+      angular.module('todoApp', [])
+        .controller('TodoListController', ['$scope', function($scope) {
+          this.todoText = '';
+          this.todos = todoListModel.todos;
+
+          this.addTodo = function() {
+            todoListModel.addTodo({text:this.todoText, done:false});
+            //this.todos.push({text:this.todoText, done:false});
+            this.todoText = '';
+          };
+
+          this.remaining = function() {
+            var count = 0;
+            angular.forEach(this.todos, function(todo) {
+              count += todo.done ? 0 : 1;
+            });
+            return count;
+          };
+
+          this.archive = function() {
+            var oldTodos = this.todos;
+            this.todos = [];
+            angular.forEach(oldTodos, function(todo) {
+              if (!todo.done) this.todos.push(todo);
+            });
+          };
+
+          var that = this;
+          todoListModel.on('change', function() {
+            that.todos = todoListModel.todos;
+            //$scope.$apply();  // $apply中と言われてエラーになる
+          });
+        }]);
+    </script>
+  </head>
+  <body>
+    <h2>Todo</h2>
+    <div ng-controller="TodoListController as todoList">
+      <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>
+      [ <a href="" ng-click="todoList.archive()">archive</a> ]
+      <ul class="unstyled">
+        <li ng-repeat="todo in todoList.todos">
+          <input type="checkbox" ng-model="todo.done">
+          <span class="done-{{todo.done}}">{{todo.text}}</span>
+        </li>
+      </ul>
+      <form ng-submit="todoList.addTodo()">
+        <input type="text" ng-model="todoList.todoText"  size="30"
+               placeholder="add new todo here">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+    </div>
+  </body>
+</html>

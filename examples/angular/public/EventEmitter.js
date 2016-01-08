@@ -1,0 +1,1 @@
+../../../node_modules/wolfy87-eventemitter/EventEmitter.js

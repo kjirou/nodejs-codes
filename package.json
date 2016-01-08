@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "author": "kjirou",
   "dependencies": {
+    "angular": "1.4.8",
     "app-root-path": "0.1.0",
     "async": "0.9.0",
     "aws-sdk": "2.1.46",
@@ -63,7 +64,8 @@
     "underscore": "1.7.0",
     "utils-merge": "1.0.0",
     "uuid": "1.4.1",
-    "validator": "3.19.0"
+    "validator": "3.19.0",
+    "wolfy87-eventemitter": "4.3.0"
   },
   "devDependencies": {
     "fixpack": "1.2.0"
