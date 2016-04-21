@@ -20,6 +20,14 @@
           this.setState({ content: 'setState1' });
           this.setState({ content: 'setState2' });
           this.setState({ content: 'setState3' });
+
+          setTimeout(() => {
+            this.setState({ content: 'setState3.1' });
+          }, 0);
+          setTimeout(() => {
+            this.setState({ content: 'setState3.2' });
+          }, 1);
+
           setTimeout(() => {
             this.setState({ content: 'setState4' });
             this.setState({ content: 'setState5' });
