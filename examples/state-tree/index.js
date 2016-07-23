@@ -6,7 +6,13 @@ const assert = require('assert');
 const StateTree = require('state-tree');
 
 
+class Foo {}
+
 const tree = StateTree({
+  // Can not pass functions
+  //func() {
+  //},
+  instance: new Foo(),
   money: 1000,
   party: {
     members: [
@@ -54,3 +60,7 @@ tree.unshift('party.members', {
 
 const taro2 = tree.get('party.members.1');
 assert.strictEqual(taro, taro2);
+
+
+const tree2 = tree.get('');
+console.log(tree2);
