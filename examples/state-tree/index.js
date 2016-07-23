@@ -6,13 +6,16 @@ const assert = require('assert');
 const StateTree = require('state-tree');
 
 
-class Foo {}
+class Foo {
+  func() {
+  }
+}
 
 const tree = StateTree({
-  // Can not pass functions
+  // Can not pass functions directly
   //func() {
   //},
-  instance: new Foo(),
+  foo: new Foo(),
   money: 1000,
   party: {
     members: [
