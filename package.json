@@ -8,6 +8,7 @@
     "async": "0.9.0",
     "aws-sdk": "2.1.46",
     "babel": "5.8.23",
+    "baobab": "^2.3.3",
     "blessed": "0.1.81",
     "bluebird": "2.3.2",
     "chalk": "1.1.0",
