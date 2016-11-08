@@ -75,3 +75,83 @@ validated = tv4.validateMultiple({
   }
 }, schema);
 assert.strictEqual(validated.errors.length, 1);
+
+
+//
+// [{ children: [] }] の再帰
+//
+
+var schema2 = {
+  children: {
+    type: 'array',
+    items: {
+      type: 'object',
+      required: [
+        'name',
+        'children',
+      ],
+      properties: {
+        name: {
+          type: 'string',
+        },
+        children: {
+          $ref: '#/children'
+        },
+      },
+    },
+  },
+  $ref: '#/children'
+};
+
+var validated2;
+
+validated2 = tv4.validateMultiple([
+  {
+    name: 'oya',
+    children: [],
+  },
+], schema2);
+assert.strictEqual(validated2.errors.length, 0);
+
+validated2 = tv4.validateMultiple([
+  {
+    name: 'oya',
+    children: [
+      {
+        name: 'ko1',
+        children: [
+          {
+            name: 'mago',
+            children: [],
+          }
+        ],
+      },
+      {
+        name: 'ko2',
+        children: [],
+      },
+    ],
+  },
+], schema2);
+assert.strictEqual(validated2.errors.length, 0);
+
+validated2 = tv4.validateMultiple([
+  {
+    name: 'oya',
+    children: [
+      {
+        name: 'ko1',
+        children: [
+          {
+            children: [],
+          }
+        ],
+      },
+      {
+        name: 'ko2',
+        children: [],
+      },
+    ],
+  },
+], schema2);
+assert.strictEqual(validated2.errors.length, 1);
