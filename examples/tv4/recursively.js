@@ -82,25 +82,27 @@ assert.strictEqual(validated.errors.length, 1);
 //
 
 var schema2 = {
-  children: {
-    type: 'array',
-    items: {
-      type: 'object',
-      required: [
-        'name',
-        'children',
-      ],
-      properties: {
-        name: {
-          type: 'string',
-        },
-        children: {
-          $ref: '#/children'
+  definitions: {
+    children: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: [
+          'name',
+          'children',
+        ],
+        properties: {
+          name: {
+            type: 'string',
+          },
+          children: {
+            $ref: '#/definitions/children'
+          },
         },
       },
     },
   },
-  $ref: '#/children'
+  $ref: '#/definitions/children'
 };
 
 var validated2;
