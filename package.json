@@ -29,6 +29,7 @@
     "ip": "0.3.1",
     "jade": "1.5.0",
     "jsesc": "0.5.0",
+    "json-schema": "0.2.3",
     "jsondiffpatch": "0.1.38",
     "jsonschema": "1.0.2",
     "jstransform": "11.0.3",
