@@ -15,6 +15,7 @@
     "circleci": "0.2.0",
     "colors": "1.0.3",
     "concat-stream": "1.4.6",
+    "cowsay": "1.1.8",
     "deepmerge": "0.2.7",
     "dev-null": "0.1.1",
     "espower-loader": "0.10.0",
