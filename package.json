@@ -34,6 +34,7 @@
     "jsondiffpatch": "0.1.38",
     "jsonschema": "1.0.2",
     "jstransform": "11.0.3",
+    "jsx-transform": "2.3.0",
     "keypress": "0.2.1",
     "lodash": "3.10.1",
     "maze-generator": "0.1.2",
